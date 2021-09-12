@@ -1,8 +1,9 @@
 {:paths ["src"]
  :deps  {org.clojure/clojure {:mvn/version "1.10.3"}
-         ring/ring           {:mvn/version "1.9.4"}}
+         ring/ring           {:mvn/version "1.9.4"}
+         ring/ring-defaults  {:mvn/version "0.3.3"}}
  :aliases
- {:dev   {:extra-deps  {club.donutpower/system {:local/root "../system"}}
+ {:dev   {:extra-deps  {club.donutpower/dev {:local/root "../dev"}}
           :extra-paths ["dev"]}
   :build {:deps       {io.github.seancorfield/build-clj
                        {:git/tag "v0.1.2" :git/sha "0719a09"}}
