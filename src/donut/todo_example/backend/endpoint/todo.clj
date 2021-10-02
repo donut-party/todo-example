@@ -3,10 +3,11 @@
 (def handlers
   {:collection
    {:get {:handler (fn [req]
-                     {:status 200
-                      :body "hi"})}}
+                     {:status  200
+                      :headers {"Content-Type" "text/html"}
+                      :body    "todo list"})}}
 
    :member
    {:get {:handler (fn [req]
                      {:status 200
-                      :body "hi"})}}})
+                      :body   "todo"})}}})

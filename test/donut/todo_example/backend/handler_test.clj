@@ -4,6 +4,6 @@
             [ring.mock.request :as mock]))
 
 (deftest router-test
-  (= (sut/router (mock/request :get "/api/v1/todo"))
-     {:status 200
-      :body   "hi"}))
+  (is (= (sut/router (mock/request :get "/api/v1/todo"))
+         {:status 200
+          :body   "hi"})))
