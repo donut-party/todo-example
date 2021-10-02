@@ -20,3 +20,7 @@
 (defmethod ds/config :dev
   [_]
   config)
+
+(defmethod ds/config :donut.system/repl
+  [_]
+  (ds/config :dev))

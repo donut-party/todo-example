@@ -1,5 +1,8 @@
 (ns donut.todo-example.cross.endpoint-routes
-  (:require [donut.sugar.routes :as dsr]))
+  (:require [donut.sugar.routes :as dsr]
+            #?@(:clj
+                [[donut.todo-example.backend.endpoint.todo]
+                 [donut.todo-example.backend.endpoint.todo-list]])))
 
 (def routes
   (-> [{:id-key            :db/id

@@ -5,7 +5,7 @@
    {:get {:handler (fn [req]
                      {:status  200
                       :headers {"Content-Type" "text/html"}
-                      :body    "todo list"})}}
+                      :body    "todo collection"})}}
 
    :member
    {:get {:handler (fn [req]
