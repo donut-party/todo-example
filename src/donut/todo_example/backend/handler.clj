@@ -1,12 +1,25 @@
 (ns donut.todo-example.backend.handler
   (:require [donut.endpoint.middleware :as dm]
-            [donut.todo-example.backend.endpoint.todo :as todo]
-            [donut.todo-example.backend.endpoint.todo :as todo-list]
-            [reitit.core :as r]))
+            [donut.system :as ds]
+            [donut.todo-example.cross.endpoint-routes :as der]
+            [reitit.ring :as rr]))
 
 (def router
-  (r/router [["/api/v1/"]]))
+  (-> der/routes
+      rr/router
+      rr/ring-handler))
+
+(defn wrap-db
+  [handler db]
+  (fn [req]
+    (handler (assoc req :db db))))
 
 (defn handler
-  []
-  (dm/middleware router))
+  [opts]
+  (-> router
+      (wrap-db (:db opts))
+      dm/middleware))
+
+(def HandlerComponent
+  {:start (fn [config _ _] (handler config))
+   :db    (ds/ref :db)})

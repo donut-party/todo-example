@@ -3,7 +3,8 @@
          ring/ring           {:mvn/version "1.9.4"}
          ring/ring-defaults  {:mvn/version "0.3.3"}}
  :aliases
- {:dev   {:extra-deps  {club.donutpower/dev {:local/root "../dev"}}
+ {:dev   {:extra-deps  {club.donutpower/dev {:local/root "../dev"}
+                        ring/ring-mock      {:mvn/version "0.4.0"}}
           :extra-paths ["dev"]}
   :build {:deps       {io.github.seancorfield/build-clj
                        {:git/tag "v0.1.2" :git/sha "0719a09"}}
