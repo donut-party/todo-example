@@ -14,8 +14,12 @@
                      :options {:port  (ds/ref [:env :http-port])
                                :join? false}}
            :handler {:start (fn [config _ _] (dh/handler config))
-                     :db    (ds/ref [:db :postgres])}}
-    :db   {:postgres true}}})
+                     :db    (ds/ref [:db :connection])}}
+    :db   {:connection "postgresql://localhost/todoexample_dev?user=daniel&password="
+           :migratus   {:start         (fn [opts _ _])
+                        :db            (ds/ref :connection)
+                        :store         :database
+                        :migration-dir "migrations"}}}})
 
 (defmethod ds/config :dev
   [_]
