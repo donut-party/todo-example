@@ -2,11 +2,17 @@
   (:require [donut.endpoint.middleware :as dm]
             [donut.system :as ds]
             [donut.todo-example.cross.endpoint-routes :as der]
-            [reitit.ring :as rr]))
+            [reitit.coercion.malli :as rcm]
+            [reitit.ring :as rr]
+            [reitit.ring.coercion :as rrc]
+            [reitit.ring.middleware.parameters :as rrmp]))
 
 (def router
   (-> der/routes
-      rr/router
+      (rr/router {:data {:coercion rcm/coercion
+                         :middleware [rrmp/parameters-middleware
+                                      rrc/coerce-request-middleware
+                                      rrc/coerce-response-middleware]}})
       rr/ring-handler))
 
 (defn wrap-db
