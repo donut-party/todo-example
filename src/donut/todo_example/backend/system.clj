@@ -31,6 +31,10 @@
   [_]
   config)
 
+(defmethod ds/config :test
+  [_]
+  (assoc-in config [::ds/defs :http :server] nil))
+
 (defmethod ds/config :donut.system/repl
   [_]
   (ds/config :dev))

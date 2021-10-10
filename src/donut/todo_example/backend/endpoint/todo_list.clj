@@ -14,12 +14,11 @@
               :headers {"Content-Type" "text/html"}
               :body    (str todo-lists)}))}
    :member
-   {:get {
-          :handler    (fn [{:keys [path-params db]}]
-                        (prn "params" (:params db))
+   {:get {:parameters {:path [:map [:db/id int?]]}
+          :handler    (fn [{:keys [params db] :as req}]
                         (let [todo-lists (->> {:select [:*]
                                                :from   [:todo_list]
-                                               :where  [:= :id (java.lang.Integer/parseInt (:db/id path-params))]}
+                                               :where  [:= :id (:db/id params)]}
                                               sql/format
                                               (j/query db)
                                               (into []))]

@@ -9,10 +9,11 @@
 
 (def router
   (-> der/routes
-      (rr/router {:data {:coercion rcm/coercion
+      (rr/router {:data {:coercion   rcm/coercion
                          :middleware [rrmp/parameters-middleware
                                       rrc/coerce-request-middleware
-                                      rrc/coerce-response-middleware]}})
+                                      rrc/coerce-response-middleware
+                                      dm/wrap-merge-params]}})
       rr/ring-handler))
 
 (defn wrap-db
