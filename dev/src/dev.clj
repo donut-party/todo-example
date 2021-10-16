@@ -9,6 +9,7 @@
    [donut.todo-example.backend.system :as sys]
    [malli.core :as m]
    [migratus.core :as migratus]
+   [muuntaja.core :as mu]
    [reitit.core :as r]
    [ring.mock.request :as ring-mock])
   (:refer-clojure :exclude [test]))
