@@ -14,8 +14,10 @@
                      :handler (ds/ref :handler)
                      :options {:port  (ds/ref [:env :http-port])
                                :join? false}}
-           :handler {:start (fn [config _ _] (dh/handler config))
-                     :db    (ds/ref [:db :connection])}}
+           :handler {:start  (fn [config _ _] (dh/handler config))
+                     :db     (ds/ref [:db :connection])
+                     :router (ds/ref :router)}
+           :router  dh/router}
     :db   {:connection {:start
                         (constantly
                          {:connection-uri
