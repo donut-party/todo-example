@@ -11,8 +11,7 @@
                                  (j/query db)
                                  (into []))]
              {:status  200
-              :headers {"Content-Type" "text/html"}
-              :body    (str todo-lists)}))}
+              :body    todo-lists}))}
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
@@ -23,5 +22,4 @@
                                               (j/query db)
                                               (into []))]
                           {:status  200
-                           :headers {"Content-Type" "application/transit+json"}
                            :body    todo-lists}))}}})

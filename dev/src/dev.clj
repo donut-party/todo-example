@@ -3,6 +3,7 @@
   (:require
    [clojure.tools.namespace.repl :as nsrepl]
    [dev.hawk]
+   [donut.endpoint.test.harness :as deth]
    [donut.system :as ds]
    [donut.system.repl :as dsr]
    [donut.system.repl.state :as dsrs]
