@@ -6,11 +6,9 @@
             [reitit.ring :as rr]))
 
 (def router
-  (-> der/routes
-      (rr/router {:data {:coercion   rcm/coercion
-                         :muuntaja   m/instance
-                         :middleware dm/route-middleware}})
-      rr/ring-handler))
+  (rr/router der/routes {:data {:coercion   rcm/coercion
+                                :muuntaja   m/instance
+                                :middleware dm/route-middleware}}))
 
 (defn wrap-db
   [handler db]
@@ -20,5 +18,6 @@
 (defn handler
   [{:keys [router db]}]
   (-> router
+      (rr/ring-handler)
       (wrap-db db)
       dm/app-middleware))
