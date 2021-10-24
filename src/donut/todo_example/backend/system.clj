@@ -1,6 +1,7 @@
 (ns donut.todo-example.backend.system
   (:require [donut.system :as ds]
             [donut.todo-example.backend.handler :as dh]
+            [next.jdbc :as jdbc]
             [ring.adapter.jetty :as rj]
             [migratus.core :as migratus]))
 
@@ -18,10 +19,9 @@
                      :db     (ds/ref [:db :connection])
                      :router (ds/ref :router)}
            :router  dh/router}
-    :db   {:connection {:start
-                        (constantly
-                         {:connection-uri
-                          "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password="})}
+    :db   {:uri        "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password="
+           :connection {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
+                        :uri   (ds/ref :uri)}
            :migratus   {:start         (fn [opts _ _] opts)
                         :after-start   (fn [opts _ _]
                                          (migratus/migrate opts))
@@ -35,7 +35,9 @@
 
 (defmethod ds/config :test
   [_]
-  (assoc-in config [::ds/defs :http :server] nil))
+  (-> config
+      (assoc-in [::ds/defs :http :server] nil)
+      (assoc-in [::ds/defs :db :uri] "jdbc:postgresql://localhost/todoexample_test?user=daniel&password=")))
 
 (defmethod ds/config :donut.system/repl
   [_]

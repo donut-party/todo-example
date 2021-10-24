@@ -20,4 +20,7 @@
 (when-not dsrs/system
   (dsr/start))
 
+(def start dsr/start)
+(def stop dsr/stop)
+
 (defn db-config [] (get-in dsrs/system [::ds/instances :db :migratus]))
