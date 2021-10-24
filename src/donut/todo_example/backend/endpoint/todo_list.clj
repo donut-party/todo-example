@@ -1,6 +1,6 @@
 (ns donut.todo-example.backend.endpoint.todo-list
-  (:require [clojure.java.jdbc :as j]
-            [honey.sql :as sql]))
+  (:require [honey.sql :as sql]
+            [next.jdbc.sql :as jsql]))
 
 (def handlers
   {:collection
@@ -8,7 +8,7 @@
            (let [todo-lists (->> {:select [:*]
                                   :from   [:todo_list]}
                                  sql/format
-                                 (j/query db)
+                                 (jsql/query db)
                                  (into []))]
              {:status  200
               :body    todo-lists}))}
@@ -19,7 +19,7 @@
                                                :from   [:todo_list]
                                                :where  [:= :id (:id all-params)]}
                                               sql/format
-                                              (j/query db)
+                                              (jsql/query db)
                                               (into []))]
                           {:status  200
                            :body    todo-lists}))}}})

@@ -3,7 +3,8 @@
             [donut.endpoint.test.harness :as deth]
             [reifyhealth.specmonstah.core :as sm]
             [reifyhealth.specmonstah.spec-gen :as sg]
-            [next.jdbc.sql :as jsql]))
+            [next.jdbc.sql :as jsql]
+            [next.jdbc :as jdbc]))
 
 (defn db
   []
@@ -53,3 +54,15 @@
   (-> (sg/ent-db-spec-gen {:schema specmonstah-schema} query)
       (sm/visit-ents-once :inserted-data insert-generated)
       (sm/attr-map :inserted-data)))
+
+(defn truncate-all
+  []
+  (jdbc/execute! (db) ["TRUNCATE TABLE todo CASCADE"])
+  (jdbc/execute! (db) ["TRUNCATE TABLE todo_list CASCADE"]))
+
+(defmacro with-test-data
+  [[binding-names query] & body]
+  `(let [~binding-names (insert ~query)
+         result#        (do ~@body)]
+     (truncate-all)
+     result#))
