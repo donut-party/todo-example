@@ -22,9 +22,10 @@
     :db   {:uri        "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password="
            :connection {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
                         :uri   (ds/ref :uri)}
-           :migratus   {:start         (fn [opts _ _] opts)
-                        :after-start   (fn [opts _ _]
-                                         (migratus/migrate opts))
+           :migratus   {:start         (fn [opts _ _]
+                                         (when (:run? opts)
+                                           (migratus/migrate opts)))
+                        :run?          false
                         :db            (ds/ref :connection)
                         :store         :database
                         :migration-dir "migrations"}}}})
