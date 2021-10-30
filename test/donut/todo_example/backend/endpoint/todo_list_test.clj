@@ -11,7 +11,7 @@
     (is (= [tl0 tl1]
            (deth/read-body (deth/handle-request :get :todo-lists))))))
 
-(deftest gets-todo-list
+(deftest gets-single-todo-list
   (data/with-test-data
     [{:keys [tl0]} {:todo-list [[1]]}]
     (is (= [tl0]
