@@ -26,6 +26,10 @@
 
     :put {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
+                        (jsql/update! db
+                                      :todo_list
+                                      (dissoc all-params :id)
+                                      (select-keys all-params [:id]))
                         (let [todo-lists (->> {:select [:*]
                                                :from   [:todo_list]
                                                :where  [:= :id (:id all-params)]}
@@ -33,4 +37,8 @@
                                               (jsql/query db)
                                               (into []))]
                           {:status 200
-                           :body   todo-lists}))}}})
+                           :body   todo-lists}))}
+
+    :delete {:parameters {:path [:map [:id int?]]}
+             :handler (fn [{:keys [all-params db]}]
+                        (jsql/delete! db :todo_list (select-keys all-params [:id])))}}})
