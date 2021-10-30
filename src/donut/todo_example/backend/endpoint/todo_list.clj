@@ -10,8 +10,8 @@
                                  sql/format
                                  (jsql/query db)
                                  (into []))]
-             {:status  200
-              :body    todo-lists}))}
+             {:status 200
+              :body   todo-lists}))}
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
@@ -21,5 +21,16 @@
                                               sql/format
                                               (jsql/query db)
                                               (into []))]
-                          {:status  200
-                           :body    todo-lists}))}}})
+                          {:status 200
+                           :body   todo-lists}))}
+
+    :put {:parameters {:path [:map [:id int?]]}
+          :handler    (fn [{:keys [all-params db]}]
+                        (let [todo-lists (->> {:select [:*]
+                                               :from   [:todo_list]
+                                               :where  [:= :id (:id all-params)]}
+                                              sql/format
+                                              (jsql/query db)
+                                              (into []))]
+                          {:status 200
+                           :body   todo-lists}))}}})

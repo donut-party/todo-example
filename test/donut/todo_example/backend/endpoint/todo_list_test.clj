@@ -15,4 +15,13 @@
   (data/with-test-data
     [{:keys [tl0]} {:todo-list [[1]]}]
     (is (= [tl0]
-           (deth/read-body (deth/handle-request :get :todo-lists {:id (:todo_list/id tl0)}))))))
+           (deth/read-body (deth/handle-request :get [:todo-lists {:id (:todo_list/id tl0)}]))))))
+
+(deftest updates-todo-list
+  (data/with-test-data
+    [{:keys [tl0]} {:todo-list [[1]]}]
+    (is (= [tl0]
+           (-> (deth/handle-request
+                :put
+                [:todo-lists {:id (:todo_list/id tl0)}])
+               (deth/read-body))))))

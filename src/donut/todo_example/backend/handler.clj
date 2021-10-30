@@ -16,8 +16,8 @@
     (handler (assoc req :db db))))
 
 (defn handler
-  [{:keys [router db]}]
+  [{:keys [router middleware db]}]
   (-> router
       (rr/ring-handler)
       (wrap-db db)
-      dm/app-middleware))
+      middleware))
