@@ -1,6 +1,7 @@
 (ns donut.todo-example.data
   (:require [clojure.spec.alpha :as s]
             [donut.endpoint.test.harness :as deth]
+            [donut.todo-example.backend.system] ;; for multimethod
             [reifyhealth.specmonstah.core :as sm]
             [reifyhealth.specmonstah.spec-gen :as sg]
             [next.jdbc.sql :as jsql]

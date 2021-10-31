@@ -15,14 +15,13 @@
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
-                        (let [todo-lists (->> {:select [:*]
-                                               :from   [:todo_list]
-                                               :where  [:= :id (:id all-params)]}
-                                              sql/format
-                                              (jsql/query db)
-                                              (into []))]
-                          {:status 200
-                           :body   todo-lists}))}
+                        {:status 200
+                         :body   (->> {:select [:*]
+                                       :from   [:todo_list]
+                                       :where  [:= :id (:id all-params)]}
+                                      sql/format
+                                      (jsql/query db)
+                                      (into []))})}
 
     :put {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
@@ -30,14 +29,13 @@
                                       :todo_list
                                       (dissoc all-params :id)
                                       (select-keys all-params [:id]))
-                        (let [todo-lists (->> {:select [:*]
-                                               :from   [:todo_list]
-                                               :where  [:= :id (:id all-params)]}
-                                              sql/format
-                                              (jsql/query db)
-                                              (into []))]
-                          {:status 200
-                           :body   todo-lists}))}
+                        {:status 200
+                         :body   (->> {:select [:*]
+                                       :from   [:todo_list]
+                                       :where  [:= :id (:id all-params)]}
+                                      sql/format
+                                      (jsql/query db)
+                                      (into []))})}
 
     :delete {:parameters {:path [:map [:id int?]]}
              :handler (fn [{:keys [all-params db]}]
