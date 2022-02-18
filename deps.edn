@@ -16,6 +16,7 @@
                         club.donutpower/system        {:local/root "../system"}
                         club.donutpower/endpoint      {:local/root "../endpoint"}
                         club.donutpower/endpoint-test {:local/root "../endpoint-test"}
+                        club.donutpower/frontend      {:local/root "../frontend"}
                         hawk/hawk                     {:mvn/version "0.2.11"}
                         org.clojure/tools.namespace   {:mvn/version "1.1.0"}
                         ring/ring-mock                {:mvn/version "0.4.0"}}

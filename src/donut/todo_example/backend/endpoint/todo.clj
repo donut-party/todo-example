@@ -3,7 +3,8 @@
             [next.jdbc.sql :as jsql]))
 
 (def handlers
-  {:collection
+  {;; "/todo"
+   :collection
    {:get (fn [{:keys [db]}]
            {:status 200
             :body   (->> {:select [:*]
@@ -11,6 +12,8 @@
                          sql/format
                          (jsql/query db)
                          (into []))})}
+
+   ;; "/todo/:id"
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
