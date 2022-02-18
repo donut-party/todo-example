@@ -2,6 +2,9 @@
   (:require [honey.sql :as sql]
             [next.jdbc.sql :as jsql]))
 
+(def parameters
+  {:path [:map [:id int?]]})
+
 (def handlers
   {;; "/todo"
    :collection
@@ -17,7 +20,7 @@
    ;; "/todo/:id"
    :member
    {:get
-    {:parameters {:path [:map [:id int?]]}
+    {:parameters parameters
      :handler    (fn [{:keys [all-params db]}]
                    {:status 200
                     :body   (->> {:select [:*]
@@ -28,7 +31,7 @@
                                  (into []))})}
 
     :put
-    {:parameters {:path [:map [:id int?]]}
+    {:parameters parameters
      :handler    (fn [{:keys [all-params db]}]
                    (jsql/update! db
                                  :todo
@@ -43,6 +46,6 @@
                                  (into []))})}
 
     :delete
-    {:parameters {:path [:map [:id int?]]}
+    {:parameters parameters
      :handler    (fn [{:keys [all-params db]}]
                    (jsql/delete! db :todo (select-keys all-params [:id])))}}})

@@ -1,7 +1,11 @@
 # dev
 
-- uses postgres with a db named `todoexample_dev`
-  - create with `createdb todoexample_dev`
+Create postgres dbs:
+
+``` shell
+createdb todoexample_dev
+createdb todoexample_test
+```
 
 After starting REPL, `(dev)`
 
