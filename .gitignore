@@ -17,6 +17,6 @@ node_modules
 out
 output
 pom.xml*
-public/css/styles.css
+styles.css
 target
 tmp
