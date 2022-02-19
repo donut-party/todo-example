@@ -4,6 +4,7 @@
    [clojure.tools.namespace.repl :as nsrepl]
    [dev.hawk]
    [donut.endpoint.test.harness :as deth]
+   [donut.endpoint.routes :as der]
    [donut.system :as ds]
    [donut.system.repl :as dsr]
    [donut.system.repl.state :as dsrs]
@@ -19,6 +20,10 @@
 
 (when-not dsrs/system
   (dsr/start))
+
+(defn routes
+  []
+  (get-in dsrs/system [::ds/defs :http :routes]))
 
 (def start dsr/start)
 (def stop dsr/stop)

@@ -14,7 +14,7 @@
 
 (def config
   {::ds/defs
-   {:env  {:http-port 8080}
+   {:env  {:http-port 3010}
     :http {:server     {:start (fn [{:keys [handler options]} _ _]
                                  (rj/run-jetty handler options))
                         :stop  (fn [_ instance _]
