@@ -1,7 +1,9 @@
 *.DS_Store
 *.jar
 *.log
-.clj-kondo
+.DS_Store
+.clj-kondo/.cache
+.cljs_node_repl
 .cpcache
 .dir-locals.el
 .lein-env
@@ -9,4 +11,11 @@
 .lein-repl-history
 .lsp
 .nrepl*
+.shadow-cljs
+frontend-target
+node_modules
+out
+output
+pom.xml*
 target
+tmp

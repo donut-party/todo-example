@@ -24,3 +24,11 @@ from dev:
 ``` clojure
 (migratus/migrate (db-config))
 ```
+
+## starting Shadow
+
+``` shell
+npm install
+npx shadow-cljs watch dev
+```
+

@@ -1,0 +1,1 @@
+{:lint-as {donut.todo-example.data/with-test-data clojure.core/let}}
