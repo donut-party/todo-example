@@ -8,6 +8,7 @@
             [donut.todo-example.cross.endpoint-routes :as endpoint-routes]
             [donut.todo-example.frontend.app :as app]
             [donut.todo-example.frontend.frontend-routes :as frontend-routes]
+            [donut.todo-example.frontend.subs] ;; load subs
             [donut.system :as ds]
             [meta-merge.core :as meta-merge]))
 
