@@ -5,4 +5,4 @@
 
 (rf/reg-sub :todo-lists
   (fn [db]
-    (dcu/entities db :todo-list :id)))
+    (dcu/entities db :todo-list :todo_list/id)))

@@ -2,6 +2,7 @@
   (:require
    [donut.frontend.core.utils :as dcu]
    [donut.frontend.form.components :as dfc]
+   [donut.frontend.form.flow :as dff]
    [donut.frontend.nav.components :as dnc]
    [donut.todo-example.frontend.ui :as ui]
    [re-frame.core :as rf]))
@@ -18,9 +19,13 @@
 (defn component
   []
   [:div
-   [:h1 "Home"]
-   (dfc/with-form [:post :todo-lists]
-     [:form {:on-submit (dcu/prevent-default #(*submit))}
-      [*field :text :title]])
-   (let [todo-lists @(rf/subscribe [:todo-lists])]
-     [ui/ul (map todo-list-li todo-lists)])])
+   [:div {:class "mb-8"}
+    [ui/h2 "New Todo List"]
+    (dfc/with-form [:post :todo-lists]
+      [ui/form
+       [:form {:on-submit (dcu/prevent-default #(*submit {:on {:success [[::dff/clear-form :$ctx]]}}))}
+        [*field :text :title {:placeholder "todo list title"}]]])]
+   [:div
+    [ui/h2 "Todo Lists"]
+    (let [todo-lists @(rf/subscribe [:todo-lists])]
+      [ui/ul (map todo-list-li todo-lists)])]])
