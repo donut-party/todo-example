@@ -2,6 +2,8 @@
   (:require [honey.sql :as sql]
             [next.jdbc.sql :as jsql]))
 
+
+
 (defn todo-list-by-id
   [db params]
   (->> {:select [:*]
@@ -11,16 +13,22 @@
        (jsql/query db)
        (first)))
 
+(defn todo-lists
+  [db]
+  (->> {:select [:*]
+        :from   [:todo_list]}
+       sql/format
+       (jsql/query db)
+       (into [])))
+
 (def handlers
   {:collection
-   {:get (fn [{:keys [db]}]
-           (let [todo-lists (->> {:select [:*]
-                                  :from   [:todo_list]}
-                                 sql/format
-                                 (jsql/query db)
-                                 (into []))]
-             {:status 200
-              :body   todo-lists}))}
+   {:get  (fn [{:keys [db]}]
+            {:status 200
+             :body   (todo-lists db)})
+    :post (fn [{:keys [all-params db]}]
+            {:status 200
+             :body   (jsql/insert! db :todo_list all-params)})}
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]
@@ -37,5 +45,5 @@
                          :body   (todo-list-by-id db all-params)})}
 
     :delete {:parameters {:path [:map [:id int?]]}
-             :handler (fn [{:keys [all-params db]}]
-                        (jsql/delete! db :todo_list (select-keys all-params [:id])))}}})
+             :handler    (fn [{:keys [all-params db]}]
+                           (jsql/delete! db :todo_list (select-keys all-params [:id])))}}})
