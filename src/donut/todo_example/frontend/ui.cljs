@@ -7,7 +7,7 @@
   [:>.list-container :bg-white :shadow :overflow-hidden :sm:rounded-md]
   [:>.list-container>ul :divide-y :divide-gray-200]
   [:>.list-container>ul>li :p-3]
-  ([& list-items]
+  ([list-items]
    [:<>
     (into
      [:div.list-container

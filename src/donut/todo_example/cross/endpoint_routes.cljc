@@ -5,7 +5,7 @@
                  [donut.todo-example.backend.endpoint.todo-list]])))
 
 (def routes
-  (-> [{:id-key           :id
+  (-> [{:id-key           :todo_list/id
         :auth-id-key      :id
         ::der/path-prefix "/api/v1"}
        [:donut.todo-example.backend.endpoint.todo-list]
