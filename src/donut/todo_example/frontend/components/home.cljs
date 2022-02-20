@@ -7,6 +7,6 @@
   []
   [:div
    [:h1 "Home"]
-   (dfc/with-form [:post :todos]
+   (dfc/with-form [:post :todo-lists]
      [:form {:on-submit (dcu/prevent-default #(*submit))}
       [*field :text :title]])])
