@@ -33,7 +33,8 @@
                         :conf  {:routes      (ds/ref :routes)
                                 :router-opts {:data {:coercion   rcm/coercion
                                                      :muuntaja   m/instance
-                                                     :middleware dm/route-middleware}}}}}
+                                                     :middleware (ds/ref :route-middleware)}}}}
+           :route-middleware {:start (fn [_ _ _] (dm/route-middleware))}}
     :db   {:connection {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
                         :conf  {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
            :migratus   {:start (fn [{:keys [run?] :as opts} _ _]

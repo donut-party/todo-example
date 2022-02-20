@@ -29,6 +29,7 @@
     :post (fn [{:keys [all-params db]}]
             {:status 200
              :body   (jsql/insert! db :todo_list all-params)})}
+
    :member
    {:get {:parameters {:path [:map [:id int?]]}
           :handler    (fn [{:keys [all-params db]}]

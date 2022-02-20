@@ -12,8 +12,8 @@
            (deth/read-body (deth/handle-request :get :todo-lists))))))
 
 (deftest creates-todo-list
-  (is (= [{}]
-         (deth/read-body (deth/handle-request :post :todo-lists {:title "test"})))))
+  (is (deth/contains-entity? (deth/read-body (deth/handle-request :post :todo-lists {:title "test"}))
+                             #:todo_list{:title "test"})))
 
 (deftest gets-single-todo-list
   (data/with-test-data
