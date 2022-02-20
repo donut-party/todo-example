@@ -15,6 +15,8 @@
     {:name       :todo-lists
      :components {:main [tll/component]}
      :lifecycle  {:enter [[::dsf/get :todo-lists]]}}]
-   ["/todo-list/{id}"
+   ["/todo-list/{todo_list/id}"
     {:name       :todo-list
-     :components {:main [:div "todo-list"]}}]])
+     :components {:main [:div "todo-list"]}
+     :coercion   rm/coercion
+     :parameters {:path [:map [:todo_list/id int?]]}}]])

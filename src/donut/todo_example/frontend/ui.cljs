@@ -6,7 +6,7 @@
   {"--gi-divide-y-reverse" 0}
   [:>.list-container :bg-white :shadow :overflow-hidden :sm:rounded-md]
   [:>.list-container>ul :divide-y :divide-gray-200]
-  [:>.list-container>ul>li :p-3]
+  [:a :block :p-3]
   ([list-items]
    [:<>
     (into
@@ -15,3 +15,8 @@
       (->> list-items
            (map (fn [li] [:li li]))
            (into [:ul {:role "list" :class "divide-y"}]))])]))
+
+(o/defstyled link :span
+  [:>a :text-blue-600 :hover:text-green-600 :hover:bg-gray-50]
+  ([link]
+   [:<> link]))

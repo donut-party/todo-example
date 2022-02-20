@@ -2,14 +2,18 @@
   (:require
    [donut.frontend.core.utils :as dcu]
    [donut.frontend.form.components :as dfc]
+   [donut.frontend.nav.components :as dnc]
    [donut.todo-example.frontend.ui :as ui]
    [re-frame.core :as rf]))
 
 (defn todo-list-li
   [todo-list]
   ;; TODO add key
-  [:<>
-   [:span (:todo_list/title todo-list)]])
+  [ui/link
+   (dnc/simple-route-link
+    {:route-name   :todo-list
+     :route-params todo-list}
+    (:todo_list/title todo-list))])
 
 (defn component
   []
