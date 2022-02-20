@@ -9,7 +9,7 @@
   [todo-list]
   ;; TODO add key
   [:<>
-   [:span (get todo-list "todo_list/title")]])
+   [:span (:todo_list/title todo-list)]])
 
 (defn component
   []

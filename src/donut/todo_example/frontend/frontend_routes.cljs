@@ -10,11 +10,11 @@
   [["/"
     {:name       :home
      :components {:main [h/component]}
-     :lifecycle  {:enter [[::dsf/get :todos]]}}]
+     :lifecycle  {:enter [[::dsf/get :todo-lists]]}}]
    ["/todo-list"
     {:name       :todo-lists
      :components {:main [tll/component]}
-     :lifecycle  {:enter [[::dsf/get :todos]]}}]
+     :lifecycle  {:enter [[::dsf/get :todo-lists]]}}]
    ["/todo-list/{id}"
     {:name       :todo-list
      :components {:main [:div "todo-list"]}}]])
