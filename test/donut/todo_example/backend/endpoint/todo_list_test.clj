@@ -17,8 +17,9 @@
 
 (deftest gets-single-todo-list
   (data/with-test-data
-    [{:keys [tl0]} {:todo-list [[1]]}]
-    (is (= tl0
+    [{:keys [t0 t1 tl0]} {:todo [[2]]}]
+    (is (= [[:entities [:todo-list :todo_list/id [tl0]]]
+            [:entities [:todo :todo/id [t0 t1]]]]
            (deth/read-body (deth/handle-request :get [:todo-list {:todo_list/id (:todo_list/id tl0)}]))))))
 
 (deftest updates-todo-list
