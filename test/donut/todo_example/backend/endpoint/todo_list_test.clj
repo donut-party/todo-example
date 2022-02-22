@@ -19,7 +19,7 @@
   (data/with-test-data
     [{:keys [tl0]} {:todo-list [[1]]}]
     (is (= tl0
-           (deth/read-body (deth/handle-request :get [:todo-list {:id (:todo_list/id tl0)}]))))))
+           (deth/read-body (deth/handle-request :get [:todo-list {:todo_list/id (:todo_list/id tl0)}]))))))
 
 (deftest updates-todo-list
   (data/with-test-data
@@ -27,13 +27,13 @@
     (is (= #:todo_list{:id (:todo_list/id tl0) :title "new title"}
            (-> (deth/handle-request
                 :put
-                [:todo-list {:id (:todo_list/id tl0)}]
+                [:todo-list {:todo_list/id (:todo_list/id tl0)}]
                 {:title "new title"})
                (deth/read-body))))))
 
 (deftest deletes-todo-list
   (data/with-test-data
     [{:keys [tl0]} {:todo-list [[1]]}]
-    (deth/handle-request :delete [:todo-list {:id (:todo_list/id tl0)}])
+    (deth/handle-request :delete [:todo-list (select-keys tl0 [:todo_list/id])])
     (is (= []
            (deth/read-body (deth/handle-request :get :todo-lists))))))

@@ -15,7 +15,7 @@
   (data/with-test-data
     [{:keys [t0]} {:todo [[1]]}]
     (is (= t0
-           (deth/read-body (deth/handle-request :get [:todo {:id (:todo/id t0)}]))))))
+           (deth/read-body (deth/handle-request :get [:todo (select-keys t0 [:todo/id])]))))))
 
 (deftest updates-todo
   (data/with-test-data
@@ -23,13 +23,13 @@
     (is (= (assoc t0 :todo/description "new description")
            (-> (deth/handle-request
                 :put
-                [:todo {:id (:todo/id t0)}]
+                [:todo (select-keys t0 [:todo/id])]
                 {:description "new description"})
                (deth/read-body))))))
 
 (deftest deletes-todo
   (data/with-test-data
     [{:keys [t0]} {:todo [[1]]}]
-    (deth/handle-request :delete [:todo {:id (:todo/id t0)}])
+    (deth/handle-request :delete [:todo (select-keys t0 [:todo/id])])
     (is (= []
            (deth/read-body (deth/handle-request :get :todos))))))

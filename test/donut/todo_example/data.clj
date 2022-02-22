@@ -63,7 +63,7 @@
 
 (defmacro with-test-data
   [[binding-names query] & body]
-  `(let [~binding-names (insert ~query)
-         result#        (do ~@body)]
+  `(do
      (truncate-all)
-     result#))
+     (let [~binding-names (insert ~query)]
+       ~@body)))
