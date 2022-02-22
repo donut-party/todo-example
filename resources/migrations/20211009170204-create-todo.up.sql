@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS todo (
   todo_list_id int NOT NULL REFERENCES todo_list (id),
   description varchar(255),
   due_date date,
-  done boolean NOT NULL
+  done boolean NOT NULL DEFAULT FALSE
 );

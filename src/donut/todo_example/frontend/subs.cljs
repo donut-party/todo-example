@@ -11,3 +11,9 @@
 (rf/reg-sub :routed-todo-list
   (fn [db]
     (dnu/routed-entity db :todo-list :todo_list/id)))
+
+(rf/reg-sub :routed-todos
+  (fn [db]
+    (->> (dcu/entities db :todo)
+         (filter #(= (:todo_list/id (dnu/params db))
+                     (:todo/todo_list_id %))))))

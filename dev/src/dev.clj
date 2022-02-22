@@ -29,3 +29,4 @@
 (def stop dsr/stop)
 
 (defn db-config [] (get-in dsrs/system [::ds/instances :db :migratus]))
+(defn router [] (get-in dsrs/system [::ds/instances :http :router]))
