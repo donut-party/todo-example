@@ -1,32 +1,15 @@
 (ns donut.todo-example.backend.endpoint.todo-list
-  (:require [honey.sql :as sql]
+  (:require [donut.todo-example.backend.query.todo-list :as qtl]
             [next.jdbc.sql :as jsql]))
 
 (def parameters
   {:path [:map [:todo_list/id int?]]})
 
-(defn todo-list-by-id
-  [db params]
-  (->> {:select [:*]
-        :from   [:todo_list]
-        :where  [:= :todo_list/id (:todo_list/id params)]}
-       sql/format
-       (jsql/query db)
-       (first)))
-
-(defn todo-lists
-  [db]
-  (->> {:select [:*]
-        :from   [:todo_list]}
-       sql/format
-       (jsql/query db)
-       (into [])))
-
 (def handlers
   {:collection
    {:get  (fn [{:keys [db]}]
             {:status 200
-             :body   (todo-lists db)})
+             :body   (qtl/todo-lists db)})
     :post (fn [{:keys [all-params db]}]
             {:status 200
              :body   (jsql/insert! db :todo_list all-params)})}
@@ -35,7 +18,7 @@
    {:get {:parameters parameters
           :handler    (fn [{:keys [all-params db]}]
                         {:status 200
-                         :body   (todo-list-by-id db all-params)})}
+                         :body   (qtl/todo-list-by-id db all-params)})}
 
     :put {:parameters parameters
           :handler    (fn [{:keys [all-params db]}]
@@ -44,7 +27,7 @@
                                       (dissoc all-params :todo_list/id)
                                       (select-keys all-params [:todo_list/id]))
                         {:status 200
-                         :body   (todo-list-by-id db all-params)})}
+                         :body   (qtl/todo-list-by-id db all-params)})}
 
     :delete {:parameters parameters
              :handler    (fn [{:keys [all-params db]}]

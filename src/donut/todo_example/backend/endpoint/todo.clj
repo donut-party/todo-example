@@ -1,30 +1,22 @@
 (ns donut.todo-example.backend.endpoint.todo
-  (:require [honey.sql :as sql]
-            [next.jdbc.sql :as jsql]))
+  (:require
+   [donut.todo-example.backend.query.todo :as qt]
+   [next.jdbc.sql :as jsql]))
 
 (def parameters
-  {:path [:map [:todo/id int?]]})
-
-(defn todo-by-id
-  [db params]
-  (->> {:select [:*]
-        :from   [:todo]
-        :where  [:= :todo/id (:todo/id params)]}
-       sql/format
-       (jsql/query db)
-       first))
+  {:path [:map
+          [:todo/id int?]
+          [:todo/todo_list_id int?]]})
 
 (def handlers
   {;; "/todo"
    :collection
    {:get
-    (fn [{:keys [db]}]
-      {:status 200
-       :body   (->> {:select [:*]
-                     :from   [:todo]}
-                    sql/format
-                    (jsql/query db)
-                    (into []))})}
+    {:parameters {:path [:map [:todo_list/id int?]]}
+     :handler
+     (fn [{:keys [db all-params]}]
+       {:status 200
+        :body   (qt/todos-by-todo-list-id db all-params)})}}
 
    ;; "/todo/:id"
    :member
@@ -32,7 +24,7 @@
     {:parameters parameters
      :handler    (fn [{:keys [all-params db]}]
                    {:status 200
-                    :body   (todo-by-id db all-params)})}
+                    :body   (qt/todo-by-id db all-params)})}
 
     :put
     {:parameters parameters
@@ -42,7 +34,7 @@
                                  (dissoc all-params :todo/id)
                                  (select-keys all-params [:todo/id]))
                    {:status 200
-                    :body   (todo-by-id db all-params)})}
+                    :body   (qt/todo-by-id db all-params)})}
 
     :delete
     {:parameters parameters
