@@ -37,6 +37,16 @@
   ([& children]
    (into [:<>] children)))
 
+(o/defstyled h1 :h1
+  :order-1
+  :text-gray-900
+  :text-3xl
+  :font-extrabold
+  :tracking-tight
+  :mt-2
+  ([& children]
+   (into [:<>] children)))
+
 (o/defstyled h2 :h2
   :order-1
   :text-gray-900

@@ -3,13 +3,13 @@
             [next.jdbc.sql :as jsql]))
 
 (def parameters
-  {:path [:map [:id int?]]})
+  {:path [:map [:todo/id int?]]})
 
 (defn todo-by-id
   [db params]
   (->> {:select [:*]
         :from   [:todo]
-        :where  [:= :id (:id params)]}
+        :where  [:= :todo/id (:todo/id params)]}
        sql/format
        (jsql/query db)
        first))
@@ -39,12 +39,12 @@
      :handler    (fn [{:keys [all-params db]}]
                    (jsql/update! db
                                  :todo
-                                 (dissoc all-params :id)
-                                 (select-keys all-params [:id]))
+                                 (dissoc all-params :todo/id)
+                                 (select-keys all-params [:todo/id]))
                    {:status 200
                     :body   (todo-by-id db all-params)})}
 
     :delete
     {:parameters parameters
      :handler    (fn [{:keys [all-params db]}]
-                   (jsql/delete! db :todo (select-keys all-params [:id])))}}})
+                   (jsql/delete! db :todo (select-keys all-params [:todo/id])))}}})

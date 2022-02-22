@@ -2,13 +2,14 @@
   (:require [honey.sql :as sql]
             [next.jdbc.sql :as jsql]))
 
-
+(def parameters
+  {:path [:map [:todo_list/id int?]]})
 
 (defn todo-list-by-id
   [db params]
   (->> {:select [:*]
         :from   [:todo_list]
-        :where  [:= :id (:id params)]}
+        :where  [:= :todo_list/id (:todo_list/id params)]}
        sql/format
        (jsql/query db)
        (first)))
@@ -31,20 +32,20 @@
              :body   (jsql/insert! db :todo_list all-params)})}
 
    :member
-   {:get {:parameters {:path [:map [:id int?]]}
+   {:get {:parameters parameters
           :handler    (fn [{:keys [all-params db]}]
                         {:status 200
                          :body   (todo-list-by-id db all-params)})}
 
-    :put {:parameters {:path [:map [:id int?]]}
+    :put {:parameters parameters
           :handler    (fn [{:keys [all-params db]}]
                         (jsql/update! db
                                       :todo_list
-                                      (dissoc all-params :id)
-                                      (select-keys all-params [:id]))
+                                      (dissoc all-params :todo_list/id)
+                                      (select-keys all-params [:todo_list/id]))
                         {:status 200
                          :body   (todo-list-by-id db all-params)})}
 
-    :delete {:parameters {:path [:map [:id int?]]}
+    :delete {:parameters parameters
              :handler    (fn [{:keys [all-params db]}]
-                           (jsql/delete! db :todo_list (select-keys all-params [:id])))}}})
+                           (jsql/delete! db :todo_list (select-keys all-params [:todo_list/id])))}}})
