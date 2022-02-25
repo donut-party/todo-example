@@ -14,9 +14,6 @@
             :role  "topnav"}
       [ui/link
        [dnc/simple-route-link {:route-name :home}
-        "home"]]
-      [ui/link
-       [dnc/simple-route-link {:route-name :todo-lists}
-        "todo lists"]]]
+        "home"]]]
      [:div {:class "max-w-2xl mx-auto mt-4"}
       @(rf/subscribe [::dnf/routed-component :main])]]]])

@@ -24,7 +24,8 @@
     (dfc/with-form [:post :todo-lists]
       [ui/form
        [:form {:on-submit (dcu/prevent-default #(*submit {:on {:success [[::dff/clear-form :$ctx]]}}))}
-        [(dcu/focus-component [*field :text :title {:placeholder "todo list title"}])]]])]
+        [(dcu/focus-component [*field :text :title {:placeholder "todo list title"
+                                                    :donut.field/no-label? true}])]]])]
    [:div
     [ui/h2 "Todo Lists"]
     (let [todo-lists @(rf/subscribe [:todo-lists])]
