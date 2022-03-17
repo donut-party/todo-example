@@ -11,28 +11,41 @@
 
 (def config
   {::ds/defs
-   {:env        {:http-port 3010}
-    :middleware (merge dm/MiddlewareComponentGroup
-                       {:routes der/routes})
-    :http       {:server     {:start (fn [{:keys [handler options]} _ _]
-                                       (rj/run-jetty handler options))
-                              :stop  (fn [_ instance _]
-                                       (.stop instance))
-                              :conf  {:handler (ds/ref :handler)
-                                      :options {:port  (ds/ref [:env :http-port])
-                                                :join? false}}}
-                 :handler    {:start (fn [config _ _] (dh/handler config))
-                              :conf  {:db         (ds/ref [:db :connection])
-                                      :router     (ds/ref [:middleware :router])
-                                      :middleware (ds/ref [:middleware :middleware])}}}
-    :db         {:connection {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
-                              :conf  {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
-                 :migratus   {:start (fn [{:keys [run?] :as opts} _ _]
-                                       (when run? (migratus/migrate opts)))
-                              :conf  {:run?          true
-                                      :db            (ds/ref :connection)
-                                      :store         :database
-                                      :migration-dir "migrations"}}}}})
+   {:env
+    {:http-port 3010}
+
+    :middleware
+    (merge dm/MiddlewareComponentGroup
+           {:routes der/routes})
+
+    :http
+    {:server
+     {:start (fn [{:keys [handler options]} _ _]
+               (rj/run-jetty handler options))
+      :stop  (fn [_ instance _]
+               (.stop instance))
+      :conf  {:handler (ds/ref :handler)
+              :options {:port  (ds/ref [:env :http-port])
+                        :join? false}}}
+
+     :handler
+     {:start (fn [conf _ _] (dh/handler conf))
+      :conf  {:db         (ds/ref [:db :connection])
+              :router     (ds/ref [:middleware :router])
+              :middleware (ds/ref [:middleware :middleware])}}}
+
+    :db
+    {:connection
+     {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
+      :conf  {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
+
+     :migratus
+     {:start (fn [{:keys [run?] :as opts} _ _]
+               (when run? (migratus/migrate opts)))
+      :conf  {:run?          true
+              :db            (ds/ref :connection)
+              :store         :database
+              :migration-dir "migrations"}}}}})
 
 (defmethod ds/named-system :dev
   [_]
