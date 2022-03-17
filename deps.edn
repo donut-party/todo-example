@@ -12,11 +12,13 @@
          reifyhealth/specmonstah           {:mvn/version "2.0.0"}
          ring/ring                         {:mvn/version "1.9.4"}
          ring/ring-defaults                {:mvn/version "0.3.3"}}
+
  :aliases
- {:dev {:extra-deps  {club.donutpower/sugar         {:local/root "../sugar"}
+ {:dev {:extra-deps  {club.donutpower/endpoint-test {:local/root "../endpoint-test"}
+                      club.donutpower/routes        {:local/root "../routes"}
+                      club.donutpower/middleware    {:local/root "../middleware"}
+                      club.donutpower/sugar         {:local/root "../sugar"}
                       club.donutpower/system        {:local/root "../system"}
-                      club.donutpower/endpoint      {:local/root "../endpoint"}
-                      club.donutpower/endpoint-test {:local/root "../endpoint-test"}
                       hawk/hawk                     {:mvn/version "0.2.11"}
                       org.clojure/tools.namespace   {:mvn/version "1.1.0"}
                       ring/ring-mock                {:mvn/version "0.4.0"}}
