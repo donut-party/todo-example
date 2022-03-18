@@ -1,5 +1,7 @@
 (ns donut.todo-example.backend.system
   (:require
+   [aero.core :as aero]
+   [clojure.java.io :as io]
    [donut.middleware :as dm]
    [donut.system :as ds]
    [donut.todo-example.backend.handler :as dh]
@@ -9,14 +11,16 @@
    [next.jdbc :as jdbc]
    [ring.adapter.jetty :as rj]))
 
+(def env-config
+  (aero/read-config (io/resource "config/env.edn")))
+
 (def config
   {::ds/defs
    {:env
-    {:http-port 3010}
+    env-config
 
     :middleware
-    (merge dm/MiddlewareComponentGroup
-           {:routes der/routes})
+    (assoc dm/MiddlewareComponentGroup :routes der/routes)
 
     :http
     {:server

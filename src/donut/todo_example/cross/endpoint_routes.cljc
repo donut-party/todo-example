@@ -6,26 +6,26 @@
 
 (def routes
   (dr/merge-route-opts
-   [["/todo-list"
+   [["/api/v1/todo-list"
      {:name     :todo-lists
       :ent-type :todo-list
-      :id-key   :todo/id}
+      :id-key   :todo_list/id}
      #?(:clj todo-list/collection-handlers)]
 
-    ["/todo-list/{todo_list/id}"
-     {:name     :todo-lists
+    ["/api/v1/todo-list/{todo_list/id}"
+     {:name     :todo-list
       :ent-type :todo-list
       :id-key   :todo_list/id}
      #?(:clj todo-list/member-handlers)]
 
-    ["/todo-list/{todo_list/id}/todo"
+    ["/api/v1/todo-list/{todo_list/id}/todo"
      {:name     :todos
       :ent-type :todo
       :id-key   :todo/id}
      #?(:clj todo/collection-handlers)]
 
-    ["/todo-list/{todo/todo_list_id}/todo/{todo/id}"
-     {:name     :todos
+    ["/api/v1/todo-list/{todo/todo_list_id}/todo/{todo/id}"
+     {:name     :todo
       :ent-type :todo
       :id-key   :todo/id}
      #?(:clj todo/member-handlers)]]))
