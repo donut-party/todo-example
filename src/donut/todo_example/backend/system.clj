@@ -63,10 +63,6 @@
   [_]
   (ds/system :base {[:env] (env-config :dev)}))
 
-(defmethod ds/named-system :donut.system/repl
-  [_]
-  (ds/system :dev))
-
 (defmethod ds/named-system :test
   [_]
   (ds/system :dev

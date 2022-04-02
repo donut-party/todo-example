@@ -2,7 +2,7 @@
   {:clj-kondo/config {:linters {:unused-namespace {:level :off}}}}
   (:require
    [clojure.tools.namespace.repl :as nsrepl]
-   [dev.hawk]
+   [dev.repl]
    [donut.endpoint.test.harness :as deth]
    [donut.routes :as dr]
    [donut.system :as ds]
@@ -18,9 +18,6 @@
 
 (nsrepl/set-refresh-dirs "dev/src" "src" "test")
 
-(when-not dsrs/system
-  (dsr/start))
-
 (defn routes
   []
   (get-in dsrs/system [::ds/defs :http :routes]))
@@ -30,3 +27,10 @@
 
 (defn db-config [] (get-in dsrs/system [::ds/instances :db :migratus]))
 (defn router [] (get-in dsrs/system [::ds/instances :http :router]))
+
+(defmethod ds/named-system :donut.system/repl
+  [_]
+  (ds/system :dev))
+
+(when-not dsrs/system
+  (dsr/start))
