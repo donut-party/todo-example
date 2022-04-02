@@ -63,12 +63,16 @@
   [_]
   (ds/system :base {[:env] (env-config :dev)}))
 
+(defonce run-migrations? (atom true))
+
 (defmethod ds/named-system :test
   [_]
   (ds/system :dev
     {[:env]                       (env-config :test)
      [:db :connection :conf :uri] "jdbc:postgresql://localhost/todoexample_test?user=daniel&password="
-     [:db :migratus :conf :run?]  false
+     [:db :migratus :conf :run?]  (let [run? @run-migrations?]
+                                    (reset! run-migrations? false)
+                                    run?)
      [:http :server]              ::disabled
 
      [:http :middleware :conf :security :anti-forgery] false}))

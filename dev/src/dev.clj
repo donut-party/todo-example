@@ -2,7 +2,7 @@
   {:clj-kondo/config {:linters {:unused-namespace {:level :off}}}}
   (:require
    [clojure.tools.namespace.repl :as nsrepl]
-   [dev.repl]
+   [dev.repl :as dev-repl]
    [donut.endpoint.test.harness :as deth]
    [donut.routes :as dr]
    [donut.system :as ds]
@@ -30,7 +30,10 @@
 
 (defmethod ds/named-system :donut.system/repl
   [_]
-  (ds/system :dev))
+  (ds/system :dev
+    {[:db :migratus :conf :run?] (let [run? (:run-migrations? @dev-repl/persistent-state)]
+                                   (swap! dev-repl/persistent-state assoc :run-migrations? false)
+                                   run?)}))
 
 (when-not dsrs/system
   (dsr/start))
