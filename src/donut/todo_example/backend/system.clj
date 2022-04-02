@@ -11,9 +11,11 @@
    [next.jdbc :as jdbc]
    [ring.adapter.jetty :as rj]))
 
-(defn env-config [& [profile]]
-  (aero/read-config (io/resource "config/env.edn")
-                    (when profile {:profile profile})))
+(defn env-config [& [profile-name]]
+  (-> "config/env.edn"
+      io/resource
+      (aero/read-config (when profile-name {:profile profile-name}))
+      (assoc :profile-name profile-name)))
 
 (def base-system
   {::ds/defs
@@ -46,7 +48,8 @@
 
      :migratus
      {:start (fn [{:keys [run?] :as opts} _ _]
-               (when run? (migratus/migrate opts)))
+               (when run?
+                 (migratus/migrate opts)))
       :conf  {:run?          true
               :db            (ds/ref :connection)
               :store         :database
@@ -67,7 +70,8 @@
 (defmethod ds/named-system :test
   [_]
   (ds/system :dev
-    {[:db :connection :conf :uri] "jdbc:postgresql://localhost/todoexample_test?user=daniel&password="
+    {[:env]                       (env-config :test)
+     [:db :connection :conf :uri] "jdbc:postgresql://localhost/todoexample_test?user=daniel&password="
      [:db :migratus :conf :run?]  false
      [:http :server]              ::disabled
 
