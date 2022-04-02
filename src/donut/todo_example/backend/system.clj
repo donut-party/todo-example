@@ -14,7 +14,7 @@
 (def env-config
   (aero/read-config (io/resource "config/env.edn")))
 
-(def config
+(def base-system
   {::ds/defs
    {:env
     env-config
@@ -53,7 +53,11 @@
 
 (defmethod ds/named-system :dev
   [_]
-  config)
+  base-system)
+
+(defmethod ds/named-system :donut.system/repl
+  [_]
+  (ds/system :dev))
 
 (defmethod ds/named-system :test
   [_]
@@ -63,7 +67,3 @@
      [:http :server]              ::disabled
 
      [:http :middleware :conf :security :anti-forgery] false}))
-
-(defmethod ds/named-system :donut.system/repl
-  [_]
-  (ds/system :dev))
