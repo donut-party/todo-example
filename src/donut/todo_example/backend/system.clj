@@ -11,13 +11,14 @@
    [next.jdbc :as jdbc]
    [ring.adapter.jetty :as rj]))
 
-(def env-config
-  (aero/read-config (io/resource "config/env.edn")))
+(defn env-config [& [profile]]
+  (aero/read-config (io/resource "config/env.edn")
+                    (when profile {:profile profile})))
 
 (def base-system
   {::ds/defs
    {:env
-    env-config
+    (env-config)
 
     :middleware
     (assoc dm/MiddlewareComponentGroup :routes der/routes)
@@ -51,9 +52,13 @@
               :store         :database
               :migration-dir "migrations"}}}}})
 
-(defmethod ds/named-system :dev
+(defmethod ds/named-system :base
   [_]
   base-system)
+
+(defmethod ds/named-system :dev
+  [_]
+  (ds/system :base {[:env] (env-config :dev)}))
 
 (defmethod ds/named-system :donut.system/repl
   [_]
