@@ -25,7 +25,7 @@
       (restart* path))))
 
 (def watcher
-  (beholder/watch (restart *ns*) "src" "resources" "dev/src"))
+  (beholder/watch (restart *ns*) "src" "resources" "dev/src" "test"))
 
 (comment
   (beholder/stop watcher))
