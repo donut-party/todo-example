@@ -11,3 +11,9 @@
     {:db (dcu/dissoc-entity db :todo-list (:todo_list/id todo-list))
      :fx [[:dispatch [::dsf/delete :todo-list {:route-params todo-list
                                                :on {:success [::dnf/navigate-route :home]}}]]]}))
+
+(rf/reg-event-fx :delete-todo
+  [rf/trim-v]
+  (fn [{:keys [db]} [todo]]
+    {:db (dcu/dissoc-entity db :todo (:todo/id todo))
+     :fx [[:dispatch [::dsf/delete :todo {:route-params todo}]]]}))

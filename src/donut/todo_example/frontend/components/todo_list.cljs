@@ -18,33 +18,45 @@
 (o/defstyled todo-input :div
   [:input :p-3 :w-full :focus:bg-yellow-50 :focus:outline-none])
 
+(o/defstyled delete-btn :div
+  :float-right :bg-red-500 :text-sm :text-white :px-2 :py-1
+  :rounded-md :hover:bg-red-700 :hover:cursor-pointer
+  ([{:keys [on-click]} text]
+   ^{:on-click on-click}
+   [:<> text]))
+
 (defn todo-item
   [todo]
   (let [editing? (r/atom false)]
     (fn [todo]
       (dfc/with-form [:put :todo (select-keys todo [:todo/id :todo/todo_list_id])]
-        (if @editing?
+        [:div {:class "flex flex-row"}
+         [:div {:class "grow"}
+          (if @editing?
 
-          [todo-input
-           [(dcu/focus-component
-             [*input :text :todo/description
-              {:donut.input/on-blur (fn [_]
-                                      (*submit)
-                                      (swap! editing? not))}])]]
-          [todo-text
-           {:on-click (fn [_]
-                        (rf/dispatch [::dff/set-form *form-layout {:buffer todo}])
-                        (swap! editing? not))}
-           (:todo/description todo)])))))
+            [todo-input
+             [(dcu/focus-component
+               [*input :text :todo/description
+                {:donut.input/on-blur (fn [_]
+                                        (*submit)
+                                        (swap! editing? not))}])]]
+            [todo-text
+             {:on-click (fn [_]
+                          (rf/dispatch [::dff/set-form *form-layout {:buffer todo}])
+                          (swap! editing? not))}
+             (:todo/description todo)])]
+         [:div {:class "basis-2 pt-3 pr-3"}
+          [delete-btn
+           {:on-click #(rf/dispatch [:delete-todo todo])}
+           "delete"]]]))))
 
 (defn show
   []
   (let [todo-list @(rf/subscribe [:routed-todo-list])
         todos     @(rf/subscribe [:routed-todos])]
     [:div
-     [:div
-      {:class "float-right bg-red-500 text-sm text-white px-2 py-1 rounded-md hover:bg-red-700 hover:cursor-pointer"
-       :on-click #(rf/dispatch [:delete-todo-list todo-list])}
+     [delete-btn
+      {:on-click #(rf/dispatch [:delete-todo-list todo-list])}
       "delete"]
      [ui/h1 (:todo_list/title todo-list)]
 
