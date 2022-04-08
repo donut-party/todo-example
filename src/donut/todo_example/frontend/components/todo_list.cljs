@@ -36,9 +36,8 @@
             [todo-input
              [(dcu/focus-component
                [*input :text :todo/description
-                {:donut.input/on-blur (fn [_]
-                                        (*submit)
-                                        (swap! editing? not))}])]]
+                {:donut.input/on-blur
+                 (fn [_] (*submit {:on {:success (fn [_] (swap! editing? not))}}))}])]]
             [todo-text
              {:on-click (fn [_]
                           (rf/dispatch [::dff/set-form *form-layout {:buffer todo}])
@@ -49,6 +48,25 @@
            {:on-click #(rf/dispatch [:delete-todo todo])}
            "delete"]]]))))
 
+(defn todo-list-title
+  [_todo-list]
+  (let [editing? (r/atom false)]
+    (fn [todo-list]
+      (dfc/with-form
+        [:put :todo-list (select-keys todo-list [:todo_list/id])]
+        [ui/h1
+         (if @editing?
+           [todo-input
+            [(dcu/focus-component
+              [*input :text :todo_list/title
+               {:donut.input/on-blur
+                (fn [_] (*submit {:on {:success (fn [_] (swap! editing? not))}}))}])]]
+           [todo-text
+            {:on-click (fn [_]
+                         (rf/dispatch [::dff/set-form *form-layout {:buffer todo-list}])
+                         (swap! editing? not))}
+            (:todo_list/title todo-list)])]))))
+
 (defn show
   []
   (let [todo-list @(rf/subscribe [:routed-todo-list])
@@ -57,15 +75,17 @@
      [delete-btn
       {:on-click #(rf/dispatch [:delete-todo-list todo-list])}
       "delete"]
-     [ui/h1 (:todo_list/title todo-list)]
+
+     [todo-list-title todo-list]
 
      (dfc/with-form [:post :todos]
-       [ui/form
-        [:form {:on-submit
-                (dcu/prevent-default #(*submit {:on           {:success [[::dff/clear-form :$ctx]]}
-                                                :route-params todo-list}))}
-         [(dcu/focus-component [*field :text :description {:placeholder           "add a todo"
-                                                           :donut.field/no-label? true}])]]])
+       [:div {:class "mb-4 pb-4 border-b-2 border-grey-500 border-solid"}
+        [ui/form
+         [:form {:on-submit
+                 (dcu/prevent-default #(*submit {:on           {:success [[::dff/clear-form :$ctx]]}
+                                                 :route-params todo-list}))}
+          [(dcu/focus-component [*field :text :description {:placeholder           "add a todo"
+                                                            :donut.field/no-label? true}])]]]])
 
      (if (empty? todos)
        [:div.my-4 "no todos yet"]
