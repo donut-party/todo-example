@@ -5,7 +5,6 @@
    [donut.frontend.core.utils :as dcu]
    [donut.frontend.form.components :as dfc]
    [donut.frontend.form.flow :as dff]
-   [donut.frontend.sync.flow :as dsf]
    [donut.todo-example.frontend.ui :as ui]
    [lambdaisland.ornament :as o]))
 
@@ -26,7 +25,7 @@
    [:<> text]))
 
 (defn todo-item
-  [todo]
+  [_todo]
   (let [editing? (r/atom false)]
     (fn [todo]
       (dfc/with-form [:put :todo (select-keys todo [:todo/id :todo/todo_list_id])]
