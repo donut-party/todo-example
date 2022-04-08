@@ -3,6 +3,7 @@
    [re-frame.core :as rf]
    [donut.frontend.nav.components :as dnc]
    [donut.frontend.nav.flow :as dnf]
+   [donut.todo-example.frontend.handlers] ;; load handlers
    [donut.todo-example.frontend.ui :as ui]))
 
 (defn app

@@ -44,7 +44,7 @@
     [:div
      [:div
       {:class "float-right bg-red-500 text-sm text-white px-2 py-1 rounded-md hover:bg-red-700 hover:cursor-pointer"
-       :on-click #(rf/dispatch [::dsf/delete :todo-list {:route-params todo-list}])}
+       :on-click #(rf/dispatch [:delete-todo-list todo-list])}
       "delete"]
      [ui/h1 (:todo_list/title todo-list)]
 

@@ -14,5 +14,5 @@
     {:name       :todo-list
      :components {:main [tl/show]}
      :coercion   rm/coercion
-     :lifecycle  {:enter [[::dsf/get :todo-list {:rules #{:merge-route-params}}]]}
+     :lifecycle  {:enter [[::dsf/get :todo-list {::dsf/rules #{::dsf/merge-route-params}}]]}
      :parameters {:path [:map [:todo_list/id int?]]}}]])
