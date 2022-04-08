@@ -5,6 +5,7 @@
    [donut.frontend.core.utils :as dcu]
    [donut.frontend.form.components :as dfc]
    [donut.frontend.form.flow :as dff]
+   [donut.frontend.sync.flow :as dsf]
    [donut.todo-example.frontend.ui :as ui]
    [lambdaisland.ornament :as o]))
 
@@ -41,6 +42,10 @@
   (let [todo-list @(rf/subscribe [:routed-todo-list])
         todos     @(rf/subscribe [:routed-todos])]
     [:div
+     [:div
+      {:class "float-right bg-red-500 text-sm text-white px-2 py-1 rounded-md hover:bg-red-700 hover:cursor-pointer"
+       :on-click #(rf/dispatch [::dsf/delete :todo-list {:route-params todo-list}])}
+      "delete"]
      [ui/h1 (:todo_list/title todo-list)]
 
      (dfc/with-form [:post :todos]

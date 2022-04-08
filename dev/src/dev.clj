@@ -24,6 +24,7 @@
 
 (def start dsr/start)
 (def stop dsr/stop)
+(def restart dsr/restart)
 
 (defn db-config [] (get-in dsrs/system [::ds/instances :db :migratus]))
 (defn router [] (get-in dsrs/system [::ds/instances :http :router]))
@@ -31,8 +32,8 @@
 (defmethod ds/named-system :donut.system/repl
   [_]
   (ds/system :dev
-    {[:db :migratus :conf :run?] (let [run? (:run-migrations? @dev-repl/persistent-state)]
-                                   (swap! dev-repl/persistent-state assoc :run-migrations? false)
+    {[:db :migratus :conf :run?] (let [run? (not (:migrations-ran? @dev-repl/persistent-state))]
+                                   (swap! dev-repl/persistent-state assoc :migrations-ran? true)
                                    run?)}))
 
 (when-not dsrs/system
