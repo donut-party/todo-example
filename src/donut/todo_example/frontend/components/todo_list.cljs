@@ -17,6 +17,17 @@
 (o/defstyled todo-input :div
   [:input :p-3 :w-full :focus:bg-yellow-50 :focus:outline-none])
 
+(o/defstyled todo-list-input :div
+  [:input
+   :p-3
+   :w-full
+   :focus:bg-yellow-50
+   :focus:outline-none
+   :font-extrabold
+   :text-gray-900
+   :tracking-tight
+   :text-3xl])
+
 (o/defstyled delete-btn :div
   :float-right :bg-red-500 :text-sm :text-white :px-2 :py-1
   :rounded-md :hover:bg-red-700 :hover:cursor-pointer
@@ -54,28 +65,30 @@
     (fn [todo-list]
       (dfc/with-form
         [:put :todo-list (select-keys todo-list [:todo_list/id])]
-        [ui/h1
-         (if @editing?
-           [todo-input
-            [(dcu/focus-component
-              [*input :text :todo_list/title
-               {:donut.input/on-blur
-                (fn [_] (*submit {:on {:success (fn [_] (swap! editing? not))}}))}])]]
-           [todo-text
-            {:on-click (fn [_]
-                         (rf/dispatch [::dff/set-form *form-layout {:buffer todo-list}])
-                         (swap! editing? not))}
-            (:todo_list/title todo-list)])]))))
+        [:div {:class "flex flex-grow"}
+         [:div {:class "grow"}
+          [ui/h1
+           (if @editing?
+             [todo-list-input
+              [(dcu/focus-component
+                [*input :text :todo_list/title
+                 {:donut.input/on-blur
+                  (fn [_] (*submit {:on {:success (fn [_] (swap! editing? not))}}))}])]]
+             [todo-text
+              {:on-click (fn [_]
+                           (rf/dispatch [::dff/set-form *form-layout {:buffer todo-list}])
+                           (swap! editing? not))}
+              (:todo_list/title todo-list)])]]
+         [:div {:class "basis-2 pt-6 pr-3"}
+          [delete-btn
+           {:on-click #(rf/dispatch [:delete-todo-list todo-list])}
+           "delete"]]]))))
 
 (defn show
   []
   (let [todo-list @(rf/subscribe [:routed-todo-list])
         todos     @(rf/subscribe [:routed-todos])]
     [:div
-     [delete-btn
-      {:on-click #(rf/dispatch [:delete-todo-list todo-list])}
-      "delete"]
-
      [todo-list-title todo-list]
 
      (dfc/with-form [:post :todos]
