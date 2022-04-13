@@ -43,7 +43,6 @@
         [:div {:class "flex flex-row"}
          [:div {:class "grow"}
           (if @editing?
-
             [todo-input
              [(dcu/focus-component
                [*input :text :todo/description
