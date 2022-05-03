@@ -9,14 +9,14 @@
 
 (def collection-handlers
   {:get
-   {:parameters {:path [:map [:todo_list/id int?]]}
+   {:parameters collection-parameters
     :handler
     (fn [{:keys [db all-params]}]
       {:status 200
        :body   (qt/todos-by-todo-list-id db all-params)})}
 
    :post
-   {:parameters {:path [:map [:todo_list/id int?]]}
+   {:parameters collection-parameters
     :handler
     (fn [{:keys [all-params db]}]
       {:status 200
