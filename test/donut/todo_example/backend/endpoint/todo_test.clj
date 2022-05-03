@@ -1,7 +1,8 @@
 (ns donut.todo-example.backend.endpoint.todo-test
-  (:require [clojure.test :refer [deftest is use-fixtures]]
-            [donut.endpoint.test.harness :as deth]
-            [donut.todo-example.data :as data]))
+  (:require
+   [clojure.test :refer [deftest is use-fixtures]]
+   [donut.endpoint.test.harness :as deth]
+   [donut.todo-example.data :as data]))
 
 (use-fixtures :each (deth/system-fixture [:test]))
 

@@ -1,9 +1,9 @@
 (ns donut.todo-example.data
   (:require [clojure.spec.alpha :as s]
+            [clojure.spec.gen.alpha :as sg]
+            [donut.datapotato.insert.next-jdbc :as ddin]
             [donut.endpoint.test.harness :as deth]
             [donut.todo-example.backend.system] ;; for multimethod
-            [reifyhealth.specmonstah.core :as sm]
-            [reifyhealth.specmonstah.spec-gen :as sg]
             [next.jdbc.sql :as jsql]
             [next.jdbc :as jdbc]))
 
@@ -26,35 +26,33 @@
                    :todo/description
                    :todo/done]))
 
-(def specmonstah-schema
+(def dd-schema
   {:todo      {:prefix    :t
-               :spec      :todo/entity
+               :generate  {:schema :todo/entity}
+               :insert    {:table-name "todo"}
                :relations {:todo_list_id [:todo-list :todo_list/id]}}
-   :todo-list {:prefix :tl
-               :spec   :todo-list/entity}})
+   :todo-list {:prefix   :tl
+               :generate {:schema :todo-list/entity}
+               :insert   {:table-name "todo_list"}}})
 
 (def table-names
   {:todo      :todo
    :todo-list :todo_list})
 
-(defn copy-spec-gen-data
-  [_ {:keys [spec-gen]}]
-  spec-gen)
 
 (defn perform-insert
-  [ent-db {:keys [ent-type] :as opts}]
+  [_ent-db {:keys [ent-type visit-val]}]
   (jsql/insert! (db)
                 (ent-type table-names)
-                (sg/spec-gen-assoc-relations ent-db opts)))
+                visit-val))
 
-(def insert-generated
-  [copy-spec-gen-data
-   perform-insert])
+(def datapotato-db
+  {:schema   dd-schema
+   :generate {:generator (comp sg/generate s/gen)}
+   :insert   {:get-insert-db (fn [] (db))
+              :get-inserted  (fn [{:keys [insert-result]}]
+                               insert-result)}})
 
-(defn insert [query]
-  (-> (sg/ent-db-spec-gen {:schema specmonstah-schema} query)
-      (sm/visit-ents-once :inserted-data insert-generated)
-      (sm/attr-map :inserted-data)))
 
 (defn truncate-all
   []
@@ -65,5 +63,5 @@
   [[binding-names query] & body]
   `(do
      (truncate-all)
-     (let [~binding-names (insert ~query)]
+     (let [~binding-names (ddin/generate-insert datapotato-db ~query)]
        ~@body)))

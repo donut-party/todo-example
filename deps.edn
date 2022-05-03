@@ -16,19 +16,20 @@
          org.slf4j/log4j-over-slf4j        {:mvn/version "1.7.30"}
          org.slf4j/slf4j-api               {:mvn/version "1.7.30"}
          org.slf4j/osgi-over-slf4j         {:mvn/version "1.7.30"}
-         reifyhealth/specmonstah           {:mvn/version "2.0.0"}
          ring/ring                         {:mvn/version "1.9.4"}
          ring/ring-defaults                {:mvn/version "0.3.3"}}
 
  :aliases
- {:dev {:extra-deps  {club.donutpower/endpoint-test {:local/root "../endpoint-test"}
-                      club.donutpower/routes        {:local/root "../routes"}
-                      club.donutpower/middleware    {:local/root "../middleware"}
-                      club.donutpower/sugar         {:local/root "../sugar"}
-                      club.donutpower/system        {:local/root "../system"}
-                      com.nextjournal/beholder      {:mvn/version "1.0.0"}
-                      org.clojure/tools.namespace   {:mvn/version "1.1.0"}
-                      ring/ring-mock                {:mvn/version "0.4.0"}}
+ {:dev {:extra-deps  {club.donutpower/datapotato                  {:local/root "../datapotato/datapotato"}
+                      club.donutpower/datapotato-insert-next-jdbc {:local/root "../datapotato/datapotato-insert-next-jdbc"}
+                      club.donutpower/endpoint-test               {:local/root "../endpoint-test"}
+                      club.donutpower/routes                      {:local/root "../routes"}
+                      club.donutpower/middleware                  {:local/root "../middleware"}
+                      club.donutpower/sugar                       {:local/root "../sugar"}
+                      club.donutpower/system                      {:local/root "../system"}
+                      com.nextjournal/beholder                    {:mvn/version "1.0.0"}
+                      org.clojure/tools.namespace                 {:mvn/version "1.1.0"}
+                      ring/ring-mock                              {:mvn/version "0.4.0"}}
         :extra-paths ["dev/src" "test"]}
 
   :cljs {:extra-deps {org.clojure/clojurescript  {:mvn/version "1.11.4"}
