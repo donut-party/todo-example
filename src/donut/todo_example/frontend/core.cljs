@@ -20,8 +20,8 @@
    dconf/default-config
    {::ds/defs
     {:donut.frontend
-     {:sync-router     {:conf {:routes endpoint-routes/routes}}
-      :frontend-router {:conf {:routes frontend-routes/routes}}}}}))
+     {:sync-router     #::ds{:config {:routes endpoint-routes/routes}}
+      :frontend-router #::ds{:config {:routes frontend-routes/routes}}}}}))
 
 (defn ^:dev/after-load start []
   (rf/dispatch-sync [::dcf/start-system (system-config)])
