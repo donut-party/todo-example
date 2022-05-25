@@ -1,5 +1,6 @@
 (ns donut.todo-example.backend.handler
-  (:require [reitit.ring :as rr]))
+  (:require
+   [reitit.ring :as rr]))
 
 (defn wrap-db
   [handler db]

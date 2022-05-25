@@ -17,7 +17,8 @@
       (aero/read-config (when profile-name {:profile profile-name}))
       (assoc :profile-name profile-name)))
 
-(def base-system
+(defmethod ds/named-system :base
+  [_]
   {::ds/defs
    {:env
     (env-config)
@@ -27,37 +28,33 @@
 
     :http
     {:server
-     {:start (fn [{:keys [handler options]} _ _]
-               (rj/run-jetty handler options))
-      :stop  (fn [_ instance _]
-               (.stop instance))
-      :conf  {:handler (ds/ref :handler)
-              :options {:port  (ds/ref [:env :http-port])
-                        :join? false}}}
+     #::ds{:start  (fn [{:keys [::ds/config]}]
+                     (rj/run-jetty (:handler config) (:options config)))
+           :stop   (fn [{:keys [::ds/instance]}]
+                     (.stop instance))
+           :config {:handler (ds/local-ref [:handler])
+                    :options {:port  (ds/ref [:env :http-port])
+                              :join? false}}}
 
      :handler
-     {:start (fn [conf _ _] (dh/handler conf))
-      :conf  {:db         (ds/ref [:db :connection])
-              :router     (ds/ref [:middleware :router])
-              :middleware (ds/ref [:middleware :middleware])}}}
+     #::ds{:start  (fn [{:keys [::ds/config]}] (dh/handler config))
+           :config {:db         (ds/ref [:db :connection])
+                    :router     (ds/ref [:middleware :router])
+                    :middleware (ds/ref [:middleware :middleware])}}}
 
     :db
     {:connection
-     {:start (fn [{:keys [uri]} _ _] (jdbc/get-datasource uri))
-      :conf  {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
+     #::ds{:start  (fn [{:keys [::ds/config]}] (jdbc/get-datasource (:uri config)))
+           :config {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
 
      :migratus
-     {:start (fn [{:keys [run?] :as opts} _ _]
-               (when run?
-                 (migratus/migrate opts)))
-      :conf  {:run?          true
-              :db            (ds/ref :connection)
-              :store         :database
-              :migration-dir "migrations"}}}}})
-
-(defmethod ds/named-system :base
-  [_]
-  base-system)
+     #::ds{:start  (fn [{:keys [::ds/config]}]
+                     (when (:run? config)
+                       (migratus/migrate config)))
+           :config {:run?          true
+                    :db            (ds/local-ref [:connection])
+                    :store         :database
+                    :migration-dir "migrations"}}}}})
 
 (defmethod ds/named-system :dev
   [_]
@@ -74,7 +71,7 @@
                                      (when @run-migrations?
                                        (reset! run-migrations? false)
                                        true))
-     [:db :migratus :conf :run?]   (ds/ref :run-migrations?)
+     [:db :migratus :conf :run?]   (ds/local-ref [:run-migrations?])
      [:http :server]               ::disabled
 
      [:http :middleware :conf :security :anti-forgery] false}))
