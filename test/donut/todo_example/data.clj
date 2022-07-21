@@ -1,13 +1,12 @@
 (ns donut.todo-example.data
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as sg]
-            [donut.datapotato.insert.next-jdbc :as ddin]
+            [donut.datapotato.fixtures.next-jdbc :as dfn]
             [donut.endpoint.test.harness :as deth]
             [donut.todo-example.backend.system] ;; for multimethod
-            [next.jdbc.sql :as jsql]
             [next.jdbc :as jdbc]))
 
-(defn db
+(defn db-connection
   []
   (deth/instance [:db :connection]))
 
@@ -29,39 +28,22 @@
 (def dd-schema
   {:todo      {:prefix    :t
                :generate  {:schema :todo/entity}
-               :insert    {:table-name "todo"}
+               :fixtures  {:table-name "todo"}
                :relations {:todo_list_id [:todo-list :todo_list/id]}}
    :todo-list {:prefix   :tl
                :generate {:schema :todo-list/entity}
-               :insert   {:table-name "todo_list"}}})
+               :fixtures {:table-name "todo_list"}}})
 
 (def table-names
   {:todo      :todo
    :todo-list :todo_list})
 
 
-(defn perform-insert
-  [_ent-db {:keys [ent-type visit-val]}]
-  (jsql/insert! (db)
-                (ent-type table-names)
-                visit-val))
-
 (def datapotato-db
   {:schema   dd-schema
    :generate {:generator (comp sg/generate s/gen)}
-   :insert   {:get-insert-db (fn [] (db))
-              :get-inserted  (fn [{:keys [insert-result]}]
-                               insert-result)}})
-
-
-(defn truncate-all
-  []
-  (jdbc/execute! (db) ["TRUNCATE TABLE todo CASCADE"])
-  (jdbc/execute! (db) ["TRUNCATE TABLE todo_list CASCADE"]))
-
-(defmacro with-test-data
-  [[binding-names query] & body]
-  `(do
-     (truncate-all)
-     (let [~binding-names (ddin/generate-insert datapotato-db ~query)]
-       ~@body)))
+   :fixtures (merge dfn/config
+                    {:get-connection (fn [_] (db-connection))
+                     :setup          (fn [{{:keys [connection]} :fixtures}]
+                                       (jdbc/execute! connection ["TRUNCATE TABLE todo CASCADE"])
+                                       (jdbc/execute! connection ["TRUNCATE TABLE todo_list CASCADE"]))})})

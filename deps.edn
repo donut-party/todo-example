@@ -2,13 +2,13 @@
  :deps  {aero/aero                      {:mvn/version "1.1.6"}
          ch.qos.logback/logback-classic {:mvn/version "1.2.3"}
 
-         club.donutpower/datapotato                  {:local/root "../datapotato/datapotato"}
-         club.donutpower/datapotato-insert-next-jdbc {:local/root "../datapotato/datapotato-insert-next-jdbc"}
-         club.donutpower/endpoint-test               {:mvn/version "0.0.17"}
-         club.donutpower/routes                      {:mvn/version "0.0.2"}
-         club.donutpower/middleware                  {:mvn/version "0.0.4"}
-         club.donutpower/sugar                       {:mvn/version "0.0.15"}
-         club.donutpower/system                      {:mvn/version "0.0.154"}
+         club.donutpower/datapotato                    {:local/root "../datapotato/datapotato"}
+         club.donutpower/datapotato-fixtures-next-jdbc {:local/root "../datapotato/datapotato-fixtures-next-jdbc"}
+         club.donutpower/endpoint-test                 {:mvn/version "0.0.17"}
+         club.donutpower/routes                        {:mvn/version "0.0.2"}
+         club.donutpower/middleware                    {:mvn/version "0.0.4"}
+         club.donutpower/sugar                         {:mvn/version "0.0.15"}
+         club.donutpower/system                        {:mvn/version "0.0.154"}
 
          com.github.seancorfield/honeysql  {:mvn/version "2.1.818"}
          com.github.seancorfield/next.jdbc {:mvn/version "1.2.737"}
@@ -33,13 +33,13 @@
   {:extra-deps    {com.nextjournal/beholder    {:mvn/version "1.0.0"}
                    org.clojure/tools.namespace {:mvn/version "1.1.0"}
                    ring/ring-mock              {:mvn/version "0.4.0"}}
-   :override-deps {;;club.donutpower/datapotato                  {:local/root "../datapotato/datapotato"}
-                   ;;club.donutpower/datapotato-insert-next-jdbc {:local/root "../datapotato/datapotato-insert-next-jdbc"}
-                   club.donutpower/endpoint-test               {:local/root "../endpoint-test"}
-                   club.donutpower/routes                      {:local/root "../routes"}
-                   club.donutpower/middleware                  {:local/root "../middleware"}
-                   club.donutpower/sugar                       {:local/root "../sugar"}
-                   club.donutpower/system                      {:local/root "../system"}}
+   :override-deps {club.donutpower/datapotato                    {:local/root "../datapotato/datapotato"}
+                   club.donutpower/datapotato-fixtures-next-jdbc {:local/root "../datapotato/datapotato-fixtures-next-jdbc"}
+                   club.donutpower/endpoint-test {:local/root "../endpoint-test"}
+                   club.donutpower/routes        {:local/root "../routes"}
+                   club.donutpower/middleware    {:local/root "../middleware"}
+                   club.donutpower/sugar         {:local/root "../sugar"}
+                   club.donutpower/system        {:local/root "../system"}}
    :extra-paths   ["dev/src" "test"]}
 
   :cljs
