@@ -9,20 +9,20 @@
 
 (deftest gets-todos
   (dc/with-fixtures data/datapotato-db
-    (let [{:keys [t0 t1 tl0]} (dc/insert-fixtures dc/*ent-db* {:todo [[2]]})]
+    (let [{:keys [t0 t1 tl0]} (dc/insert-fixtures {:todo [[2]]})]
       (is (= [t0 t1]
              (deth/read-body (deth/handle-request :get [:todos tl0])))))))
 
 (deftest gets-single-todo
   (dc/with-fixtures data/datapotato-db
-    (let [{:keys [t0]} (dc/insert-fixtures dc/*ent-db* {:todo [[1]]})]
+    (let [{:keys [t0]} (dc/insert-fixtures {:todo [[1]]})]
       (is (= t0
              (deth/read-body (deth/handle-request :get [:todo t0])))))))
 
 
 (deftest updates-todo
   (dc/with-fixtures data/datapotato-db
-    (let [{:keys [t0]} (dc/with-fixtures dc/*ent-db* {:todo [[1]]})]
+    (let [{:keys [t0]} (dc/insert-fixtures {:todo [[1]]})]
       (is (= (assoc t0 :todo/description "new description")
              (-> (deth/handle-request
                   :put
@@ -32,7 +32,7 @@
 
 (deftest deletes-todo
   (dc/with-fixtures data/datapotato-db
-    (let [{:keys [t0 tl0]} (dc/insert-fixtures dc/*ent-db* {:todo [[1]]})]
+    (let [{:keys [t0 tl0]} (dc/insert-fixtures {:todo [[1]]})]
       (deth/handle-request :delete [:todo t0])
       (is (= []
              (deth/read-body (deth/handle-request :get [:todos tl0])))))))

@@ -2,14 +2,6 @@
  :deps  {aero/aero                      {:mvn/version "1.1.6"}
          ch.qos.logback/logback-classic {:mvn/version "1.2.3"}
 
-         club.donutpower/datapotato                    {:local/root "../datapotato/datapotato"}
-         club.donutpower/datapotato-fixtures-next-jdbc {:local/root "../datapotato/datapotato-fixtures-next-jdbc"}
-         club.donutpower/endpoint-test                 {:mvn/version "0.0.17"}
-         club.donutpower/routes                        {:mvn/version "0.0.2"}
-         club.donutpower/middleware                    {:mvn/version "0.0.4"}
-         club.donutpower/sugar                         {:mvn/version "0.0.15"}
-         club.donutpower/system                        {:mvn/version "0.0.154"}
-
          com.github.seancorfield/honeysql  {:mvn/version "2.1.818"}
          com.github.seancorfield/next.jdbc {:mvn/version "1.2.737"}
          com.lambdaisland/ornament         {:mvn/version "0.4.34"}
@@ -26,25 +18,33 @@
          org.slf4j/slf4j-api               {:mvn/version "1.7.30"}
          org.slf4j/osgi-over-slf4j         {:mvn/version "1.7.30"}
          ring/ring                         {:mvn/version "1.9.4"}
-         ring/ring-defaults                {:mvn/version "0.3.3"}}
+         ring/ring-defaults                {:mvn/version "0.3.3"}
+
+         party.donut/datapotato           {:mvn/version "1.0.448"}
+         party.donut/datapotato-next-jdbc {:mvn/version "1.0.448"}
+         party.donut/endpoint-test        {:mvn/version "0.0.18"}
+         party.donut/routes               {:mvn/version "0.0.5"}
+         party.donut/middleware           {:mvn/version "0.0.6"}
+         party.donut/sugar                {:mvn/version "0.0.16"}
+         party.donut/system               {:mvn/version "0.0.167"}}
 
  :aliases
  {:dev
   {:extra-deps    {com.nextjournal/beholder    {:mvn/version "1.0.0"}
                    org.clojure/tools.namespace {:mvn/version "1.1.0"}
                    ring/ring-mock              {:mvn/version "0.4.0"}}
-   :override-deps {club.donutpower/datapotato                    {:local/root "../datapotato/datapotato"}
-                   club.donutpower/datapotato-fixtures-next-jdbc {:local/root "../datapotato/datapotato-fixtures-next-jdbc"}
-                   club.donutpower/endpoint-test {:local/root "../endpoint-test"}
-                   club.donutpower/routes        {:local/root "../routes"}
-                   club.donutpower/middleware    {:local/root "../middleware"}
-                   club.donutpower/sugar         {:local/root "../sugar"}
-                   club.donutpower/system        {:local/root "../system"}}
+   :override-deps {party.donut/datapotato                    {:local/root "../datapotato/datapotato"}
+                   party.donut/datapotato-fixtures-next-jdbc {:local/root "../datapotato/datapotato-fixtures-next-jdbc"}
+                   party.donut/endpoint-test                 {:local/root "../endpoint-test"}
+                   party.donut/routes                        {:local/root "../routes"}
+                   party.donut/middleware                    {:local/root "../middleware"}
+                   party.donut/sugar                         {:local/root "../sugar"}
+                   party.donut/system                        {:local/root "../system"}}
    :extra-paths   ["dev/src" "test"]}
 
   :cljs
   {:extra-deps {org.clojure/clojurescript  {:mvn/version "1.11.4"}
-                club.donutpower/frontend   {:local/root "../frontend"}
+                party.donut/frontend       {:local/root "../frontend"}
                 day8.re-frame/re-frame-10x {:mvn/version "1.2.1"}
                 thheller/shadow-cljs       {:mvn/version "2.16.12"}}}
 

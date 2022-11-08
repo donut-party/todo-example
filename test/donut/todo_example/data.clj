@@ -1,7 +1,7 @@
 (ns donut.todo-example.data
   (:require [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as sg]
-            [donut.datapotato.fixtures.next-jdbc :as dfn]
+            [donut.datapotato.next-jdbc :as dfn]
             [donut.endpoint.test.harness :as deth]
             [donut.todo-example.backend.system] ;; for multimethod
             [next.jdbc :as jdbc]))
