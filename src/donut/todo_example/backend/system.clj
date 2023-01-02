@@ -6,7 +6,6 @@
    [donut.endpoint.router :as der]
    [donut.endpoint.route-group :as derg]
    [donut.system :as ds]
-   [donut.todo-example.backend.handler :as dh]
    [donut.todo-example.cross.endpoint-routes :as endpoint-routes]
    [environ.core :as env]
    [migratus.core :as migratus]
@@ -65,7 +64,7 @@
 
      :migratus
      #::ds{:start  (fn [{:keys [::ds/config]}]
-                     (when (:run-migrations? config)
+                     (when (:run? config)
                        (migratus/migrate config)))
            :config {:run?          true
                     :db            (ds/local-ref [:datasource])
@@ -81,13 +80,23 @@
 (defmethod ds/named-system :test
   [_]
   (ds/system :dev
-    {[:env]                        (env-config :test)
-     [:db :connection :conf :uri]  "jdbc:postgresql://localhost/todoexample_test?user=daniel&password="
-     [:db :run-migrations? :start] (fn [_ _ _]
-                                     (when @run-migrations?
-                                       (reset! run-migrations? false)
-                                       true))
-     [:db :migratus :conf :run?]   (ds/local-ref [:run-migrations?])
-     [:http :server]               ::disabled
+    {[:env]
+     (env-config :test)
 
-     [:http :middleware :conf :security :anti-forgery] false}))
+     [:db :connection ::ds/config :uri]
+     "jdbc:postgresql://localhost/todoexample_test?user=daniel&password="
+
+     [:db :run-migrations? :start]
+     (fn [_ _ _]
+       (when @run-migrations?
+         (reset! run-migrations? false)
+         true))
+
+     [:db :migratus ::ds/config :run?]
+     (ds/local-ref [:run-migrations?])
+
+     [:http :server]
+     ::disabled
+
+     [:http :middleware ::ds/config :security :anti-forgery]
+     false}))
