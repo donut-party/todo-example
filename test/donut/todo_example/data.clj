@@ -8,7 +8,7 @@
 
 (defn db-connection
   []
-  (deth/instance [:db :connection]))
+  (jdbc/get-connection (get-in deth/*system* [:donut.system/instances :db :datasource])))
 
 (s/def :todo-list/title string?)
 

@@ -2,10 +2,12 @@
   (:require
    [aero.core :as aero]
    [clojure.java.io :as io]
-   [donut.middleware :as dm]
+   [donut.endpoint.middleware :as dem]
+   [donut.endpoint.router :as der]
+   [donut.endpoint.route-group :as derg]
    [donut.system :as ds]
    [donut.todo-example.backend.handler :as dh]
-   [donut.todo-example.cross.endpoint-routes :as der]
+   [donut.todo-example.cross.endpoint-routes :as endpoint-routes]
    [environ.core :as env]
    [migratus.core :as migratus]
    [next.jdbc :as jdbc]
@@ -23,9 +25,6 @@
    {:env
     (env-config)
 
-    :middleware
-    (assoc dm/MiddlewareComponentGroup :routes der/routes)
-
     :http
     {:server
      #::ds{:start  (fn [{:keys [::ds/config]}]
@@ -36,23 +35,40 @@
                     :options {:port  (ds/ref [:env :http-port])
                               :join? false}}}
 
+     :middleware
+     dem/AppMiddlewareComponent
+
      :handler
-     #::ds{:start  (fn [{:keys [::ds/config]}] (dh/handler config))
-           :config {:db         (ds/ref [:db :connection])
-                    :router     (ds/ref [:middleware :router])
-                    :middleware (ds/ref [:middleware :middleware])}}}
+     #::ds{:start  (fn [{:keys [::ds/config]}]
+                     (let [{:keys [route-ring-handler middleware]} config]
+                       (middleware route-ring-handler)))
+           :config {:route-ring-handler (ds/ref [:routing :ring-handler])
+                    :middleware         (ds/local-ref [:middleware])}}}
+
+    :routing
+    {:ring-handler der/RingHandlerComponent
+     :router       der/RouterComponent
+     :router-opts  der/router-opts
+     :routes       [(ds/ref [:main-routes :route-group])]}
+
+    :main-routes
+    (derg/route-group
+     {:group-path "/api/v1"
+      :group-opts {:datasource (ds/ref [:db :datasource])}
+      :routes     endpoint-routes/routes})
+
 
     :db
-    {:connection
+    {:datasource
      #::ds{:start  (fn [{:keys [::ds/config]}] (jdbc/get-datasource (:uri config)))
            :config {:uri (env/env :db-uri "jdbc:postgresql://localhost/todoexample_dev?user=daniel&password=")}}
 
      :migratus
      #::ds{:start  (fn [{:keys [::ds/config]}]
-                     (when (:run? config)
+                     (when (:run-migrations? config)
                        (migratus/migrate config)))
            :config {:run?          true
-                    :db            (ds/local-ref [:connection])
+                    :db            (ds/local-ref [:datasource])
                     :store         :database
                     :migration-dir "migrations"}}}}})
 

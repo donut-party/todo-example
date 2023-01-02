@@ -11,16 +11,18 @@
   {:get
    {:parameters collection-parameters
     :handler
-    (fn [{:keys [db all-params]}]
+    (fn [{:keys [all-params dependencies]}]
       {:status 200
-       :body   (qt/todos-by-todo-list-id db all-params)})}
+       :body   (qt/todos-by-todo-list-id (:datasource dependencies) all-params)})}
 
    :post
    {:parameters collection-parameters
     :handler
-    (fn [{:keys [all-params db]}]
+    (fn [{:keys [all-params dependencies]}]
       {:status 200
-       :body   (jsql/insert! db :todo (set/rename-keys all-params {:todo_list/id :todo_list_id}))})}})
+       :body   (jsql/insert! (:datasource dependencies)
+                             :todo
+                             (set/rename-keys all-params {:todo_list/id :todo_list_id}))})}})
 
 (def member-parameters
   {:path [:map
@@ -30,21 +32,23 @@
 (def member-handlers
   {:get
    {:parameters member-parameters
-    :handler    (fn [{:keys [all-params db]}]
+    :handler    (fn [{:keys [all-params dependencies]}]
                   {:status 200
-                   :body   (qt/todo-by-id db all-params)})}
+                   :body   (qt/todo-by-id (:datasource dependencies) all-params)})}
 
    :put
    {:parameters member-parameters
-    :handler    (fn [{:keys [all-params db]}]
-                  (jsql/update! db
+    :handler    (fn [{:keys [all-params dependencies]}]
+                  (jsql/update! (:datasource dependencies)
                                 :todo
                                 (dissoc all-params :todo/id)
                                 (select-keys all-params [:todo/id]))
                   {:status 200
-                   :body   (qt/todo-by-id db all-params)})}
+                   :body   (qt/todo-by-id (:datasource dependencies) all-params)})}
 
    :delete
    {:parameters member-parameters
-    :handler    (fn [{:keys [all-params db]}]
-                  (jsql/delete! db :todo (select-keys all-params [:todo/id])))}})
+    :handler    (fn [{:keys [all-params dependencies]}]
+                  (jsql/delete! (:datasource dependencies)
+                                :todo
+                                (select-keys all-params [:todo/id])))}})
